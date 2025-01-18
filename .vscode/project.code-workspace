@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "root",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"titleBar.activeBackground": "#153977"
+		}
+	}
+}

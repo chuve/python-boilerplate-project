@@ -1,0 +1,16 @@
+[project]
+name = "python-boilerplate-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8.3.4", "ruff>=0.9.2"]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+
+[tool.ruff.lint]
+select = ["ANN"]
