@@ -11,6 +11,7 @@ from starlette.responses import Response
 from .blog.router import router
 from .db import init_db
 from .logger_config import LOGGING_CONFIG  # type: ignore
+from .settings import settings  # type: ignore
 
 logging.config.dictConfig(LOGGING_CONFIG)  # type: ignore
 logger = logging.getLogger(__name__)

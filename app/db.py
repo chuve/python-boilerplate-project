@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise  # type: ignore
 
+from .settings import settings
+
 TORTOISE_ORM = {  # type: ignore
     "connections": {
-        "default": "postgres://postgres:password@localhost/fastapi",
+        "default": str(settings.database_url),
     },
     "apps": {
         "app": {

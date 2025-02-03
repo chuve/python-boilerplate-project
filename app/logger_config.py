@@ -1,6 +1,13 @@
-LOGGING_CONFIG: dict[str, any] = {  # type: ignore
+from .settings import settings
+
+if settings.debug:
+    log_level = "DEBUG"
+else:
+    log_level = "INFO"
+
+LOGGING_CONFIG = {  # type: ignore
     "version": 1,
-    "disable_existing_loggers": True,
+    "disable_existing_loggers": False,
     "formatters": {
         "default": {
             "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -24,7 +31,12 @@ LOGGING_CONFIG: dict[str, any] = {  # type: ignore
     "loggers": {
         "": {
             "handlers": ["console", "file"],
-            "level": "INFO",
+            "level": log_level,
+        },
+        "tortoise": {
+            "handlers": ["console", "file"],
+            "level": log_level,
+            "propagate": False,
         },
     },
 }
