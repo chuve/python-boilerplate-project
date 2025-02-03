@@ -35,3 +35,23 @@ async def get_blog_posts(
     ]
 
     return (blog_posts, blog_posts_count)
+
+
+async def update_blog_post(
+    blog_post_uuid: UUID, blog_post_data: BlogPostCreate
+) -> BlogPostResponse | None:
+    blog_post = await BlogPost.get_or_none(id=blog_post_uuid)
+    if blog_post:
+        await blog_post.update_from_dict(blog_post_data.model_dump())  # type: ignore
+        await blog_post.save()
+        pydantic_model = await BlogPost_Pydantic.from_tortoise_orm(blog_post)
+        return BlogPostResponse(**pydantic_model.model_dump())
+
+
+async def delete_blog_post(blog_post_uuid: UUID) -> bool:
+    blog_post = await BlogPost.get_or_none(id=blog_post_uuid)
+    if blog_post:
+        await blog_post.delete()
+        return True
+    else:
+        return False

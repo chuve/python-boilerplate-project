@@ -4,7 +4,13 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from .repository import create_blog_post, get_blog_post, get_blog_posts
+from .repository import (
+    create_blog_post,
+    delete_blog_post,
+    get_blog_post,
+    get_blog_posts,
+    update_blog_post,
+)
 from .views import BlogPostCreate, BlogPostResponse, BlogPostsResponse, Pagination
 
 router = APIRouter(
@@ -52,5 +58,23 @@ async def get_post(uuid: UUID) -> BlogPostResponse:
     blog_post = await get_blog_post(uuid)
     if blog_post:
         return blog_post
+    else:
+        raise HTTPException(status_code=404, detail="BlogPost doesn't exist")
+
+
+@router.put("/posts/{uuid}")
+async def updated_post(uuid: UUID, blog_post_data: BlogPostCreate) -> BlogPostResponse:
+    blog_post = await update_blog_post(uuid, blog_post_data)
+    if blog_post:
+        return blog_post
+    else:
+        raise HTTPException(status_code=404, detail="BlogPost doesn't exist")
+
+
+@router.delete("/posts/{uuid}")
+async def delete_post(uuid: UUID) -> None:
+    is_blog_post_deleted = await delete_blog_post(uuid)
+    if is_blog_post_deleted:
+        return None
     else:
         raise HTTPException(status_code=404, detail="BlogPost doesn't exist")

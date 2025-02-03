@@ -1,3 +1,5 @@
+import logging.config
+
 from .settings import settings
 
 if settings.debug:
@@ -27,16 +29,33 @@ LOGGING_CONFIG = {  # type: ignore
             "formatter": "json",
             "filename": "app.log",
         },
+        **(
+            {
+                "logtail": {
+                    "class": "logtail.LogtailHandler",
+                    "source_token": settings.cloud_logging.token,
+                    "host": settings.cloud_logging.host,
+                }
+            }
+            if settings.cloud_logging
+            else {}
+        ),
     },
     "loggers": {
         "": {
-            "handlers": ["console", "file"],
+            "handlers": ["console", "file"]
+            + (["logtail"] if settings.cloud_logging else []),
             "level": log_level,
         },
         "tortoise": {
-            "handlers": ["console", "file"],
+            "handlers": ["console", "file"]
+            + (["logtail"] if settings.cloud_logging else []),
             "level": log_level,
             "propagate": False,
         },
     },
 }
+
+
+def configure_logging() -> None:
+    logging.config.dictConfig(LOGGING_CONFIG)  # type: ignore

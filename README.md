@@ -33,9 +33,11 @@ Set the logging level for Tortoise ORM to DEBUG.
 - Use Pydantic models for request/response validation and serialization. (views.py)
 
 TODO:
-- 👷‍♂️ Finilize crud for blog app
-- 👷‍♂️ Figure out how to organize logs in FastAPI
-- ✅ Enable debug, how to debug fastapi with VS Code?
 - Check how to write unit tests for endpoints?
+- How to build async http clients for 3rd party services?
+- How to generate clients for FastAPI? - https://fastapi.tiangolo.com/advanced/generate-clients/#install-openapi-ts
+- ✅ Finilize crud for blog app
+- ✅ Figure out how to organize logs in FastAPI
+- ✅ Enable debug, how to debug fastapi with VS Code?
 - ✅ Figure out how to work with env variables - https://docs.pydantic.dev/latest/concepts/pydantic_settings/#installation
 - ✅ How to debug tortoise in terms of SQL queries which it does - https://tortoise.github.io/logging.html?h=logging
