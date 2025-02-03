@@ -19,3 +19,9 @@ In root project dir run - `fastapi dev app/main.py`
 ### Separate Concerns:
 - Use Tortoise models for database interactions. (models.py)
 - Use Pydantic models for request/response validation and serialization. (views.py)
+
+TODO:
+- 👷‍♂️ Finilize crud for blog app
+- 👷‍♂️ Figure out how to organize logs in FastAPI
+- ✅ Enable debug, how to debug fastapi with VS Code?
+- Check how to write unit tests for endpoints?

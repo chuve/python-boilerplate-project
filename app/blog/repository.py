@@ -20,3 +20,18 @@ async def get_blog_post(blog_post_uuid: UUID) -> BlogPostResponse | None:
         pydantic_model = await BlogPost_Pydantic.from_tortoise_orm(blog_post)
         return BlogPostResponse(**pydantic_model.model_dump())
     return None
+
+
+async def get_blog_posts(
+    offset: int = 0, limit: int = 10
+) -> tuple[list[BlogPostResponse], int]:
+    blog_posts_count = await BlogPost.all().count()
+    blog_posts = await BlogPost.all().offset(offset).limit(limit)
+    blog_posts = [
+        await BlogPost_Pydantic.from_tortoise_orm(blog_post) for blog_post in blog_posts
+    ]
+    blog_posts = [
+        BlogPostResponse(**blog_post.model_dump()) for blog_post in blog_posts
+    ]
+
+    return (blog_posts, blog_posts_count)
