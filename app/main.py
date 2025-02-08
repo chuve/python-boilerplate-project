@@ -7,14 +7,13 @@ from app.exception_handlers import global_exception_handler
 from app.middlewares import LoggingRequestMiddleware
 
 from .blog.router import router
-from .db import init_db
+from .db import configure_db
 from .logger_config import configure_logging
 from .settings import Environment, settings
 
-configure_logging()
-
 app = FastAPI(title="Boilerplate FastAPI application")
-init_db(app)
+configure_logging()
+configure_db(app)
 
 app.add_exception_handler(Exception, global_exception_handler)
 app.add_middleware(LoggingRequestMiddleware)

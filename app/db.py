@@ -16,7 +16,7 @@ TORTOISE_ORM = {  # type: ignore
 }
 
 
-def init_db(app: FastAPI) -> None:
+def configure_db(app: FastAPI) -> None:
     register_tortoise(
         app,
         config=TORTOISE_ORM,
