@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from ..dependencies import validate_token
 from .repository import (
     create_blog_post,
     delete_blog_post,
@@ -14,8 +15,7 @@ from .repository import (
 from .views import BlogPostCreate, BlogPostResponse, BlogPostsResponse, Pagination
 
 router = APIRouter(
-    prefix="/blog",
-    tags=["blog"],
+    prefix="/blog", tags=["blog"], dependencies=[Depends(validate_token)]
 )
 
 

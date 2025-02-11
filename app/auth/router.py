@@ -1,28 +1,31 @@
 from fastapi import APIRouter, HTTPException
 
-from .service import AuthService, AuthServiceException
-from .views import SignInViaEmailPassword, SignUpViaEmailPassword
+from .service import AuthServiceException, auth_service
+from .views import SignInViaEmailPassword, SignUpViaEmailPassword, Token
 
 router = APIRouter(prefix="/auth", tags=["users"])
-auth_service = AuthService()
 
 
 @router.post("/email-password/sign-up")
-async def sign_up_via_email_password(payload: SignUpViaEmailPassword) -> None:
+async def sign_up_via_email_password(payload: SignUpViaEmailPassword) -> Token | None:
     try:
-        return await auth_service.sign_up_via_email_password(
+        token = await auth_service.sign_up_via_email_password(
             payload.email, payload.password
         )
+        if token:
+            return Token(access_token=token)
     except AuthServiceException as ex:
         raise HTTPException(status_code=400, detail=str(ex))
 
 
 @router.post("/email-password/sign-in")
-async def sign_in_via_email_password(payload: SignInViaEmailPassword) -> None:
+async def sign_in_via_email_password(payload: SignInViaEmailPassword) -> Token | None:
     try:
-        return await auth_service.sign_in_via_email_password(
+        token = await auth_service.sign_in_via_email_password(
             payload.email, payload.password
         )
+        if token:
+            return Token(access_token=token)
     except AuthServiceException as ex:
         raise HTTPException(status_code=400, detail=str(ex))
 

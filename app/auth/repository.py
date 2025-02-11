@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 from typing import cast
+from uuid import UUID
 
 from pydantic import BaseModel, EmailStr
 from tortoise.contrib.pydantic import pydantic_model_creator  # type: ignore
@@ -22,7 +23,7 @@ class UserDTO(BaseModel):
     As a workaroud UserDTO is used as a static Pydantic model class for type hint.
     """
 
-    id: str
+    id: UUID
     email: EmailStr
     first_name: str
     last_name: str
