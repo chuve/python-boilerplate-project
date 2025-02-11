@@ -11,5 +11,10 @@ class SignInViaEmailPassword(BaseModel):
     password: str
 
 
-class Token(BaseModel):
+class RefreshTokenPayload(BaseModel):
+    refresh_token: str
+
+
+class TokensResponse(BaseModel):
     access_token: str
+    refresh_token: str

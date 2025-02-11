@@ -30,9 +30,15 @@ class Settings(BaseSettings):
     )
     allowed_hosts: list[str] = Field(alias="ALLOWED_HOSTS", default=["localhost"])
     cloud_logging: CloudLogging | None = Field(alias="CLOUD_LOGGING", default=None)
-    jwt_secret_key: str = Field(alias="JWT_SECRET_KEY")
+    jwt_secret_key: str = Field(alias="JWT_SECRET_KEY")  # openssl rand -hex 32
+    jwt_refresh_secret_key: str = Field(
+        alias="JWT_REFRESH_SECRET_KEY"
+    )  # openssl rand -hex 32
     access_token_expire_minutes: int = Field(
         alias="ACCESS_TOKEN_EXPIRE_MINUTES", default=30
+    )  #
+    refresh_token_expire_minutes: int = Field(
+        alias="REFRESH_TOKEN_EXPIRE_MINUTES", default=60 * 24 * 7
     )
 
 
