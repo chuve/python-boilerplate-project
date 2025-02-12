@@ -1,14 +1,20 @@
-from fastapi import APIRouter, HTTPException
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException
+
+from app.auth.repository import UserDTO
+from app.dependencies import current_user
 
 from .service import AuthServiceException, auth_service
 from .views import (
+    CurrentUserResponse,
     RefreshTokenPayload,
     SignInViaEmailPassword,
     SignUpViaEmailPassword,
     TokensResponse,
 )
 
-router = APIRouter(prefix="/auth", tags=["users"])
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/email-password/sign-up")
@@ -59,3 +65,14 @@ async def sign_up_via_email_otp() -> None:
 @router.post("/email-otp/sign-up")
 async def sign_in_via_email_otp() -> None:
     pass
+
+
+@router.get("/me")
+async def get_current_user(
+    current_user: Annotated[UserDTO, Depends(current_user)],
+) -> CurrentUserResponse | None:
+    return CurrentUserResponse(
+        email=current_user.email,
+        first_name=current_user.first_name,
+        last_name=current_user.last_name,
+    )

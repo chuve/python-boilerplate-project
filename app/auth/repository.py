@@ -25,8 +25,8 @@ class UserDTO(BaseModel):
 
     id: UUID
     email: EmailStr
-    first_name: str
-    last_name: str
+    first_name: str | None
+    last_name: str | None
     password_hash: str
     created_at: datetime
     modified_at: datetime
@@ -37,6 +37,13 @@ class UserRepositoryException(Exception):
 
 
 class UserRepository:
+    _instance = None
+
+    def __new__(cls) -> "UserRepository":
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     async def create_user(self, email: str, password_hash: str) -> UserDTO:
         try:
             new_user = await User.create(email=email, password_hash=password_hash)
@@ -46,7 +53,7 @@ class UserRepository:
             logger.error(ex)
             raise UserRepositoryException(f"User with email {email} already exist")
 
-    async def find_user_by_email(self, email: str) -> UserDTO | None:
+    async def get_user_by_email(self, email: str) -> UserDTO | None:
         try:
             user = await User.get(email=email)
             if user:
@@ -54,5 +61,19 @@ class UserRepository:
                 return cast(UserDTO, user_pydantic_model)
             return None
         except DoesNotExist as ex:
-            logger.error(ex)
+            logger.exception(ex)
             raise UserRepositoryException(f"User with email {email} doesn't exist")
+
+    async def get_user_by_id(self, id: str) -> UserDTO | None:
+        try:
+            user = await User.get(id=id)
+            if user:
+                user_pydantic_model = await UserPydantic.from_tortoise_orm(user)
+                return cast(UserDTO, user_pydantic_model)
+            return None
+        except DoesNotExist as ex:
+            logger.exception(ex)
+            raise UserRepositoryException(f"User with id {id} doesn't exist")
+
+
+user_repository = UserRepository()

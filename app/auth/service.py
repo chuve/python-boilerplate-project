@@ -165,7 +165,7 @@ class AuthService:
         self, email: str, password: str
     ) -> Tokens | None:
         try:
-            user = await user_repository.find_user_by_email(email)
+            user = await user_repository.get_user_by_email(email)
             if user:
                 if await self.verify_password(user.password_hash, password):
                     return self._generate_tokens(user.id)
@@ -180,3 +180,7 @@ auth_service = AuthService(
     access_token_expire_minutes=settings.access_token_expire_minutes,
     refresh_token_expire_minutes=settings.refresh_token_expire_minutes,
 )
+
+# Posibble improvements:
+# store refresh token in db and remove it when user logout
+# issuing a new refresh token each time the refresh endpoint is called and invalidating the old one.

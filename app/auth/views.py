@@ -18,3 +18,9 @@ class RefreshTokenPayload(BaseModel):
 class TokensResponse(BaseModel):
     access_token: str
     refresh_token: str
+
+
+class CurrentUserResponse(BaseModel):
+    email: EmailStr
+    first_name: str | None
+    last_name: str | None
